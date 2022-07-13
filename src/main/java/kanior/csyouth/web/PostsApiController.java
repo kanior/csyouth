@@ -17,4 +17,9 @@ public class PostsApiController {
     public Long save(@RequestBody PostsSaveRequestDto requestDto) {
         return postsService.save(requestDto);
     }
+
+    @PostMapping("/posts")
+    public String post() {
+        return "Hello World";
+    }
 }
