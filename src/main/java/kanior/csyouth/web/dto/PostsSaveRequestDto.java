@@ -1,30 +1,32 @@
 package kanior.csyouth.web.dto;
 
 import kanior.csyouth.domain.posts.Posts;
+import kanior.csyouth.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class PostsSaveRequestDto {
 
     private String title;
     private String content;
-    private String author;
+    private User writer;
 
     @Builder
-    public PostsSaveRequestDto(String title, String content, String author) {
+    public PostsSaveRequestDto(String title, String content, User writer) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.writer = writer;
     }
 
     public Posts toEntity() {
         return Posts.builder()
                 .title(title)
                 .content(content)
-                .author(author)
+                .writer(writer)
                 .build();
     }
 }

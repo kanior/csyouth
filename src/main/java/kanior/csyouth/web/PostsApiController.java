@@ -1,11 +1,11 @@
 package kanior.csyouth.web;
 
 import kanior.csyouth.service.posts.PostsService;
+import kanior.csyouth.web.dto.PostsResponseDto;
 import kanior.csyouth.web.dto.PostsSaveRequestDto;
+import kanior.csyouth.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,8 +18,19 @@ public class PostsApiController {
         return postsService.save(requestDto);
     }
 
-    @PostMapping("/posts")
-    public String post() {
-        return "Hello World";
+    @PutMapping("/api/posts/{id}")
+    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
+        return postsService.update(id, requestDto);
+    }
+
+    @GetMapping("/api/posts/{id}")
+    public PostsResponseDto findById(@PathVariable Long id) {
+        return postsService.findById(id);
+    }
+
+    @DeleteMapping("/api/posts/{id}")
+    public Long delete(@PathVariable Long id) {
+        postsService.delete(id);
+        return id;
     }
 }

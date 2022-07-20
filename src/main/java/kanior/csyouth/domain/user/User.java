@@ -1,18 +1,20 @@
 package kanior.csyouth.domain.user;
 
 import kanior.csyouth.domain.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false)
@@ -28,7 +30,12 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    public void signUp() {
-        this.role = Role.USER;
+    @Builder
+    public User(String name, String password, String phoneNumber, Role role) {
+        this.name = name;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
     }
+
 }
