@@ -1,9 +1,9 @@
-package kanior.csyouth.web;
+package kanior.csyouth.web.posts;
 
 import kanior.csyouth.service.posts.PostsService;
-import kanior.csyouth.web.dto.PostsResponseDto;
-import kanior.csyouth.web.dto.PostsSaveRequestDto;
-import kanior.csyouth.web.dto.PostsUpdateRequestDto;
+import kanior.csyouth.web.posts.dto.PostsResponseDto;
+import kanior.csyouth.web.posts.dto.PostsSaveRequestDto;
+import kanior.csyouth.web.posts.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

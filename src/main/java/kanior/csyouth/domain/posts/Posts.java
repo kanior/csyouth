@@ -29,17 +29,16 @@ public class Posts extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @Column(nullable = false)
-    private User writer;
+    private User user;
 
     @OneToMany(mappedBy = "posts")
     private List<Reply> replies = new ArrayList<>();
 
     @Builder
-    public Posts(String title, String content, User writer) {
+    public Posts(String title, String content, User user) {
         this.title = title;
         this.content = content;
-        this.writer = writer;
+        this.user = user;
     }
 
     public void update(String title, String content) {

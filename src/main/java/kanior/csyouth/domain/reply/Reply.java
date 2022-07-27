@@ -23,16 +23,15 @@ public class Reply extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @Column(nullable = false)
-    private User writer;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id")
     private Posts posts;
 
-    public Reply(String content, User writer, Posts posts) {
+    public Reply(String content, User user, Posts posts) {
         this.content = content;
-        this.writer = writer;
+        this.user = user;
         this.posts = posts;
         this.posts.getReplies().add(this);
     }

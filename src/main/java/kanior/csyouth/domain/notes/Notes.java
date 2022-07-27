@@ -23,13 +23,12 @@ public class Notes extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @Column(nullable = false)
-    private User writer;
+    private User user;
 
     @Builder
-    public Notes(String content, User writer) {
+    public Notes(String content, User user) {
         this.content = content;
-        this.writer = writer;
+        this.user = user;
     }
 
     public void update(String content) {

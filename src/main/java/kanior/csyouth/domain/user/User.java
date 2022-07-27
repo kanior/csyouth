@@ -17,11 +17,12 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    private String loginId;
+
+    private String password;
 
     @Column(nullable = false)
-    private String password;
+    private String name;
 
     @Column(nullable = false)
     private String phoneNumber;
@@ -30,12 +31,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    @Builder
-    public User(String name, String password, String phoneNumber, Role role) {
-        this.name = name;
+    public void signUp(String loginId, String password) {
+        this.loginId = loginId;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
+        role = Role.USER;
     }
-
 }

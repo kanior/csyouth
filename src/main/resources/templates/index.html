@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header(~{::title},~{::style})">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>창신 교회 청년부</title>
+    <style></style>
+</head>
+<body>
+
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader(#{page.home})" />
+
+    <a class="btn btn-lg btn-secondary" href="/user/auth">회원 가입</a>
+
+    <div th:replace="fragments/footer :: footer" />
+</div>
+
+</body>
+</html>

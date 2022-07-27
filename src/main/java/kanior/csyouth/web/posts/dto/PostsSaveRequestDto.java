@@ -1,11 +1,10 @@
-package kanior.csyouth.web.dto;
+package kanior.csyouth.web.posts.dto;
 
 import kanior.csyouth.domain.posts.Posts;
 import kanior.csyouth.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -13,20 +12,20 @@ public class PostsSaveRequestDto {
 
     private String title;
     private String content;
-    private User writer;
+    private Long userId;
 
     @Builder
-    public PostsSaveRequestDto(String title, String content, User writer) {
+    public PostsSaveRequestDto(String title, String content, Long userId) {
         this.title = title;
         this.content = content;
-        this.writer = writer;
+        this.userId = userId;
     }
 
-    public Posts toEntity() {
+    public Posts toEntity(User user) {
         return Posts.builder()
                 .title(title)
                 .content(content)
-                .writer(writer)
+                .user(user)
                 .build();
     }
 }

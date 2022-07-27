@@ -2,9 +2,12 @@ package kanior.csyouth.service.posts;
 
 import kanior.csyouth.domain.posts.Posts;
 import kanior.csyouth.domain.posts.PostsRepository;
-import kanior.csyouth.web.dto.PostsResponseDto;
-import kanior.csyouth.web.dto.PostsSaveRequestDto;
-import kanior.csyouth.web.dto.PostsUpdateRequestDto;
+import kanior.csyouth.domain.user.User;
+import kanior.csyouth.domain.user.UserRepository;
+import kanior.csyouth.web.posts.dto.PostsListResponseDto;
+import kanior.csyouth.web.posts.dto.PostsResponseDto;
+import kanior.csyouth.web.posts.dto.PostsSaveRequestDto;
+import kanior.csyouth.web.posts.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +20,15 @@ import java.util.List;
 public class PostsService {
 
     private final PostsRepository postsRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long save(PostsSaveRequestDto requestDto) {
-        return postsRepository.save(requestDto.toEntity()).getId();
+        Long userId = requestDto.getUserId();
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 사용자입니다. id=" + userId));
+
+        return postsRepository.save(requestDto.toEntity(user)).getId();
     }
 
     @Transactional
@@ -47,4 +55,7 @@ public class PostsService {
         return new PostsResponseDto(entity);
     }
 
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc();
+    }
 }
