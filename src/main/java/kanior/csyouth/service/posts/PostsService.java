@@ -56,6 +56,7 @@ public class PostsService {
     }
 
     public List<PostsListResponseDto> findAllDesc() {
-        return postsRepository.findAllDesc();
+//        return postsRepository.findAllDesc();
+        return null;
     }
 }

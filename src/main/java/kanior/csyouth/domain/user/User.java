@@ -31,9 +31,12 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    public void signUp(String loginId, String password) {
+    @Builder
+    public User(String loginId, String password, String name, String phoneNumber, Role role) {
         this.loginId = loginId;
         this.password = password;
-        role = Role.USER;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
     }
 }

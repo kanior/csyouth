@@ -1,21 +1,11 @@
 package kanior.csyouth.web.user;
 
-import kanior.csyouth.domain.user.Role;
-import kanior.csyouth.domain.user.User;
 import kanior.csyouth.domain.user.UserRepository;
-import kanior.csyouth.web.user.dto.UserSaveForm;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserApiControllerTest {
@@ -38,7 +28,7 @@ class UserApiControllerTest {
 //        String name = "user";
 //        String password = "1111";
 //        String phoneNumber = "010-1111-2222";
-//        UserSaveForm requestDto = UserSaveForm.builder()
+//        UserSaveRequestDto requestDto = UserSaveRequestDto.builder()
 //                .name(name)
 //                .password(password)
 //                .phoneNumber(phoneNumber)

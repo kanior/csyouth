@@ -1,8 +1,6 @@
 package kanior.csyouth.domain.posts;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kanior.csyouth.web.posts.dto.PostsListResponseDto;
-import kanior.csyouth.web.posts.dto.QPostsListResponseDto;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -18,12 +16,12 @@ public class PostsRepositoryImpl implements PostsRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
-    @Override
-    public List<PostsListResponseDto> findAllDesc() {
-        return queryFactory
-                .select(new QPostsListResponseDto(posts.id, posts.title, user.name, posts.createdDate))
-                .from(posts)
-                .join(posts.user, user)
-                .fetch();
-    }
+//    @Override
+//    public List<Posts> findAllDesc() {
+//        return queryFactory
+//                .select(new QPostsListResponseDto(posts.id, posts.title, user.name, posts.createdDate))
+//                .from(posts)
+//                .join(posts.user, user)
+//                .fetch();
+//    }
 }

@@ -1,7 +1,6 @@
 package kanior.csyouth.web.user;
 
 import kanior.csyouth.service.user.UserService;
-import kanior.csyouth.web.user.dto.UserAuthForm;
 import kanior.csyouth.web.user.dto.UserSaveForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,58 +22,41 @@ public class UserController {
     private final UserService userService;
     private final HttpSession httpSession;
 
-    @GetMapping("/user/auth")
-    public String authForm(Model model) {
-        model.addAttribute("auth", new UserAuthForm());
-        return "user/authForm";
-    }
-
-    @PostMapping("/user/auth")
-    public String auth(@Validated @ModelAttribute("auth") UserAuthForm form, BindingResult bindingResult, Model model) {
-
-        if (form.getPhoneNumber() != null) {
-            try {
-                Integer.parseInt(form.getPhoneNumber());
-            } catch (Exception e) {
-//                log.info("number format exception = {}", bindingResult.getAllErrors());
-//                bindingResult.rejectValue("phoneNumber", "");
-            }
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "user/authForm";
-        }
-
-        try {
-            Long id = userService.findByNameAndPhoneNumber(form.getName(), form.getPhoneNumber());
-            if (id == -1L) {
-                return "user/authForm";
-            }
-        } catch (IllegalArgumentException e) {
-            return "user/authForm";
-        }
-
+    @GetMapping("/user/save")
+    public String saveForm(Model model) {
+        model.addAttribute("user", new UserSaveForm());
         return "user/saveForm";
     }
 
-//    @GetMapping("/user/save")
-//    public String saveForm(Model model) {
-//        model.addAttribute("user", new UserSaveForm());
-//        return "user/saveForm";
-//    }
-
     @PostMapping("/user/save")
-    public String save(@Validated @ModelAttribute("user")UserSaveForm form, BindingResult bindingResult, Model model) {
-
+    public String save(@Validated @ModelAttribute("user") UserSaveForm form, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            log.error("회원 가입 양식 오류={}", bindingResult.getAllErrors());
             return "user/saveForm";
         }
 
+        //아이디 중복 검사
+        if (userService.isLoginIdDuplicated(form.getLoginId())) {
+            bindingResult.rejectValue("loginId", "NotDuplicated");
+            return "user/saveForm";
+        }
+
+        //패스워드 검사
+        if (!form.getPassword().equals(form.getPasswordCheck())) {
+            bindingResult.rejectValue("passwordCheck", "Equal");
+            return "user/saveForm";
+        }
+
+        //이름 및 휴대폰 번호 중복 검사
+        if (userService.isNameAndPhoneNumberDuplicated(form.getName(), form.getPhoneNumber())) {
+            bindingResult.reject("DuplicatedUserCheck");
+            return "user/saveForm";
+        }
+
+        userService.save(form);
+
+//        return "user/welcome";
         return "redirect:/";
     }
 
-//    @GetMapping("/user/login")
-//    public String userLogin() {
-//        return "user/login";
-//    }
 }

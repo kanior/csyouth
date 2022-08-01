@@ -15,13 +15,36 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public Boolean isLoginIdDuplicated(String loginId) {
+        return !userRepository.findByLoginId(loginId).isEmpty();
+    }
+
+    public Boolean isNameAndPhoneNumberDuplicated(String name, String phoneNumber) {
+        return !userRepository.findByNameAndPhoneNumber(name, phoneNumber).isEmpty();
+    }
+
+    @Transactional
+    public Long save(UserSaveForm form) {
+        User savedUser = userRepository.save(User.builder()
+                .loginId(form.getLoginId())
+                .password(form.getPassword())
+                .name(form.getName())
+                .phoneNumber(form.getPhoneNumber())
+                .role(Role.USER)
+                .build());
+
+        return savedUser.getId();
+    }
+
+
+
     public Long findByNameAndPhoneNumber(String name, String phoneNumber) {
         User user = userRepository.findByNameAndPhoneNumber(name, phoneNumber).orElseThrow(() ->
                 new IllegalArgumentException("해당 회원이 존재하지 않습니다. name=" + name + ", phoneNumber=" + phoneNumber));
 
         if (user.getRole().equals(Role.USER)) {
             return -1L;
-        }
+            }
 
         return user.getId();
     }
@@ -31,11 +54,9 @@ public class UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 회원이 존재하지 않습니다. id=" + id));
 
-        user.signUp(loginId, password);
+//        user.signUp(loginId, password);
         return id;
     }
-
-
 
     @Transactional
     public void delete(Long id) {

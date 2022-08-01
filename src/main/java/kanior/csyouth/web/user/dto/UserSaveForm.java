@@ -1,25 +1,33 @@
 package kanior.csyouth.web.user.dto;
 
-import kanior.csyouth.domain.user.Role;
-import kanior.csyouth.domain.user.User;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 
 @Getter
-@NoArgsConstructor
+@Setter
 public class UserSaveForm {
 
     @NotBlank
-    @Length(min = 6, max = 16)
+    @Pattern(regexp = "[a-z\\d_-]{5,20}")
     private String loginId;
 
     @NotBlank
-    @Length(min = 8, max = 16)
+    @Pattern(regexp = "[\\w\\W]{8,16}")
     private String password;
+
+    @NotBlank
+    private String passwordCheck;
+
+    @NotBlank
+    @Pattern(regexp = "[가-힣a-zA-Z]{1,20}")
+    private String name;
+
+    @NotBlank
+    @Pattern(regexp = "^01(?:0|1|[6-9])(?:\\d{7}|\\d{8})")
+    private String phoneNumber;
 
 }
