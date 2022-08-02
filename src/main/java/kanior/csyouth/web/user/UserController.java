@@ -1,6 +1,7 @@
 package kanior.csyouth.web.user;
 
 import kanior.csyouth.service.user.UserService;
+import kanior.csyouth.web.user.dto.UserLoginForm;
 import kanior.csyouth.web.user.dto.UserSaveForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,27 +12,28 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @Controller
 @Slf4j
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
     private final HttpSession httpSession;
 
-    @GetMapping("/user/save")
+    @GetMapping("/save")
     public String saveForm(Model model) {
         model.addAttribute("user", new UserSaveForm());
         return "user/saveForm";
     }
 
-    @PostMapping("/user/save")
+    @PostMapping("/save")
     public String save(@Validated @ModelAttribute("user") UserSaveForm form, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            log.error("회원 가입 양식 오류={}", bindingResult.getAllErrors());
             return "user/saveForm";
         }
 
@@ -53,10 +55,29 @@ public class UserController {
             return "user/saveForm";
         }
 
-        userService.save(form);
+        userService.join(form);
 
 //        return "user/welcome";
         return "redirect:/";
+    }
+
+    @GetMapping("/login")
+    public String loginForm(Model model) {
+        model.addAttribute("login", new UserLoginForm());
+        return "user/loginForm";
+    }
+
+    @PostMapping("/login")
+    public String login(@Validated @ModelAttribute("login") UserLoginForm form, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "user/loginForm";
+        }
+
+        //아이디 및 비밀번호 검사
+        if (!userService.doesUserExist(form.getLoginId(), form.getPassword())) {
+
+        }
+
     }
 
 }
