@@ -1,6 +1,8 @@
 package kanior.csyouth.web.user;
 
 import kanior.csyouth.service.user.UserService;
+import kanior.csyouth.web.SessionConst;
+import kanior.csyouth.web.user.dto.LoginUserInfo;
 import kanior.csyouth.web.user.dto.UserLoginForm;
 import kanior.csyouth.web.user.dto.UserSaveForm;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
@@ -23,7 +23,6 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     private final UserService userService;
-    private final HttpSession httpSession;
 
     @GetMapping("/save")
     public String saveForm(Model model) {
@@ -68,16 +67,36 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute("login") UserLoginForm form, BindingResult bindingResult, Model model) {
+    public String login(@Validated @ModelAttribute("login") UserLoginForm form, BindingResult bindingResult,
+                        @RequestParam(defaultValue = "/") String redirectURL,
+                        HttpServletRequest request,
+                        Model model) {
+
         if (bindingResult.hasErrors()) {
             return "user/loginForm";
         }
 
-        //아이디 및 비밀번호 검사
-        if (!userService.doesUserExist(form.getLoginId(), form.getPassword())) {
+        LoginUserInfo loginUserInfo = userService.login(form.getLoginId(), form.getPassword());
 
+        //아이디 및 비밀번호 검사
+        if (loginUserInfo == null) {
+            bindingResult.reject("ExistedUserCheck");
+            return "user/loginForm";
         }
 
+        HttpSession session = request.getSession();
+        session.setAttribute(SessionConst.LOGIN_USER, loginUserInfo);
+
+        return "redirect:" + redirectURL;
     }
 
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return "redirect:/";
+    }
 }

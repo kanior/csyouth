@@ -16,7 +16,7 @@
 <body>
 
 <div class="container">
-    <div th:replace="fragments/bodyHeader :: bodyHeader(#{page.saveUser})"/>
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
 
     <form action="index.html" th:action th:object="${user}" method="post">
         <div class="row">
